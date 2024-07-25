@@ -6,6 +6,7 @@ class SidebarExThemeData {
     Color? selectedTileColor,
     Color? iconColor,
     Color? selectedIconColor,
+    Color? backgroundColor,
     TextStyle? textStyle,
     TextStyle? selectedTextStyle,
   }) {
@@ -16,6 +17,7 @@ class SidebarExThemeData {
       selectedIconColor: selectedIconColor ?? def.selectedIconColor,
       textStyle: textStyle ?? def.textStyle,
       selectedTextStyle: selectedTextStyle ?? def.selectedTextStyle,
+      backgroundColor: backgroundColor ?? def.backgroundColor,
     );
   }
 
@@ -26,6 +28,7 @@ class SidebarExThemeData {
     required this.selectedTextStyle,
     required this.iconColor,
     required this.selectedIconColor,
+    required this.backgroundColor,
   });
 
   final Color iconColor;
@@ -34,6 +37,7 @@ class SidebarExThemeData {
   final TextStyle selectedTextStyle;
   final Color selectedTileColor;
   final Color tileColor;
+  final Color backgroundColor;
 
   static SidebarExThemeData fromThemeData(ThemeData theme) {
     return SidebarExThemeData.raw(
@@ -43,6 +47,8 @@ class SidebarExThemeData {
       selectedIconColor: theme.iconTheme.color ?? def.selectedIconColor,
       textStyle: theme.textTheme.labelLarge ?? def.textStyle,
       selectedTextStyle: theme.textTheme.labelLarge ?? def.selectedTextStyle,
+      backgroundColor:
+          theme.navigationRailTheme.backgroundColor ?? def.backgroundColor,
     );
   }
 
@@ -55,5 +61,6 @@ class SidebarExThemeData {
     textStyle: TextStyle(
       color: Color.fromARGB(255, 165, 165, 165),
     ),
+    backgroundColor: Color(0xFF263238),
   );
 }

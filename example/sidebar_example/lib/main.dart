@@ -10,22 +10,36 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData(bool isDark) {
+      return ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          brightness: isDark ? Brightness.dark : Brightness.light,
+        ),
+        brightness: isDark ? Brightness.dark : Brightness.light,
+        useMaterial3: true,
+      );
+    }
+
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const NavRootView(Scaffold()),
+      debugShowCheckedModeBanner: false,
+      theme: themeData(true),
+      darkTheme: themeData(false),
+      themeMode: ThemeMode.light,
+      home: const NavRootView(),
     );
   }
 }
 
-class NavRootView extends StatelessWidget {
-  const NavRootView(this.child, {super.key});
+class NavRootView extends StatefulWidget {
+  const NavRootView({super.key});
 
-  final Widget child;
+  @override
+  State<NavRootView> createState() => _NavRootViewState();
+}
 
+class _NavRootViewState extends State<NavRootView> {
   List<Destination> destinations() => [
         const Destination(
           icon: Icon(Icons.dashboard),
@@ -62,27 +76,44 @@ class NavRootView extends StatelessWidget {
     int? childSelected;
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade900,
-      body: SidebarExTheme(
-        data: SidebarExThemeData(
-            // tileColor: Colors.green,
-            ),
-        child: SideBarEx(
-          trailing: IconButton(
-            onPressed: () {
-              expand = !expand;
-            },
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          ),
-          extended: expand,
-          destinations: destinations(),
-          selectedIndex: selected,
-          selectedChildIndex: childSelected,
-          onDestinationSelected: (rootIndex, childIndex, extra) {
-            selected = rootIndex;
-            childSelected = childIndex;
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            expand = !expand;
+            setState(() {});
           },
+          icon: const Icon(Icons.menu),
         ),
+      ),
+      backgroundColor: Colors.grey.shade900,
+      body: Row(
+        children: [
+          SidebarExTheme(
+            data: SidebarExThemeData(
+                // tileColor: Colors.green,
+                ),
+            child: SideBarEx(
+              extended: expand,
+              destinations: destinations(),
+              selectedIndex: selected,
+              selectedChildIndex: childSelected,
+              onDestinationSelected: (rootIndex, childIndex, extra) {
+                selected = rootIndex;
+                childSelected = childIndex;
+                setState(() {});
+              },
+            ),
+          ),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.blueGrey.shade900,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

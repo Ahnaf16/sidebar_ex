@@ -129,12 +129,12 @@ class _SideBarExState<T> extends State<SideBarEx<T>>
   @override
   Widget build(BuildContext context) {
     final canExpand = widget.extended && widget.width == kSidebarWidth;
-
+    final th = SidebarExTheme.of(context);
     return _ExtendedAnimation(
       animation: _extendedAnimation,
       child: AnimatedContainer(
         duration: kThemeAnimationDuration,
-        color: Theme.of(context).navigationRailTheme.backgroundColor,
+        color: th.backgroundColor,
         width: canExpand ? widget.exWidth : widget.width,
         height: MediaQuery.of(context).size.height,
         child: Column(
