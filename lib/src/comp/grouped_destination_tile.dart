@@ -33,8 +33,6 @@ class GroupedDestinationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fadeAnimation =
-        animation.drive(CurveTween(curve: const Interval(0.0, 0.25)));
     return Padding(
       padding: padding ?? const EdgeInsets.all(4),
       child: Column(
@@ -42,8 +40,9 @@ class GroupedDestinationTile extends StatelessWidget {
           if (isExpanded)
             ExpandableTile(
               icon: icon,
-              animation: fadeAnimation,
+              animation: animation,
               label: label,
+              background: backgroundColor,
               children: [
                 for (int i = 0; i < length; i += 1) itemBuilder(context, i),
               ],
@@ -53,29 +52,31 @@ class GroupedDestinationTile extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: MenuAnchor(
-                  style: const MenuStyle(
-                    alignment: Alignment.topRight,
-                    elevation: WidgetStatePropertyAll(0),
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
+              color: backgroundColor,
+              child: MenuAnchor(
+                style: MenuStyle(
+                  backgroundColor: WidgetStateProperty.all(backgroundColor),
+                  alignment: Alignment.topRight,
+                  elevation: const WidgetStatePropertyAll(0),
+                  shape: const WidgetStatePropertyAll(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                   ),
-                  alignmentOffset: const Offset(30, 0),
-                  menuChildren: [
-                    for (int i = 0; i < length; i += 1) itemBuilder(context, i),
-                  ],
-                  builder: (context, c, child) => InkWell(
-                    borderRadius: BorderRadius.circular(10),
-                    onTap: () {
-                      c.isOpen ? c.close() : c.open();
-                    },
-                    child: child,
-                  ),
+                ),
+                alignmentOffset: const Offset(30, 0),
+                menuChildren: [
+                  for (int i = 0; i < length; i += 1) itemBuilder(context, i),
+                ],
+                builder: (context, c, child) => InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: () {
+                    c.isOpen ? c.close() : c.open();
+                  },
+                  child: child,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
                   child: icon,
                 ),
               ),

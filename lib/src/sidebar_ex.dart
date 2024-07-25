@@ -140,8 +140,10 @@ class _SideBarExState<T> extends State<SideBarEx<T>>
         child: Column(
           children: [
             if (widget.leading != null) ...[
+              const SizedBox(height: 10),
               widget.leading!,
             ],
+            const SizedBox(height: 10),
             Expanded(
               child: Column(
                 children: [
@@ -257,6 +259,7 @@ class _SideBarItem<T> extends StatelessWidget {
         animation: extendedTransitionAnimation,
         padding: padding,
         tileColor: tileColor(selected),
+        backgroundColor: exTheme.backgroundColor,
         isExpanded: isExpanded,
         isSelected: selected,
         childIndex: childIndex,

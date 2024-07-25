@@ -69,12 +69,11 @@ class _NavRootViewState extends State<NavRootView> {
         ),
       ];
 
+  bool expand = true;
+  int selected = 0;
+  int? childSelected;
   @override
   Widget build(BuildContext context) {
-    bool expand = true;
-    int selected = 0;
-    int? childSelected;
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -106,10 +105,10 @@ class _NavRootViewState extends State<NavRootView> {
           ),
           Expanded(
             child: Container(
-              margin: const EdgeInsets.all(5),
+              // margin: const EdgeInsets.all(5),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.blueGrey.shade900,
+                // borderRadius: BorderRadius.circular(10),
+                color: Colors.blueGrey.shade800,
               ),
             ),
           ),

@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:sidebar_ex/sidebar_ex.dart';
 
 const Duration _kExpand = Duration(milliseconds: 200);
 
@@ -8,7 +11,6 @@ class ExpandableTile extends StatefulWidget {
     required this.icon,
     required this.label,
     this.background,
-    this.tileColor,
     required this.children,
     required this.animation,
   });
@@ -18,7 +20,6 @@ class ExpandableTile extends StatefulWidget {
   final List<Widget> children;
   final Widget icon;
   final Widget label;
-  final Color? tileColor;
 
   @override
   State<ExpandableTile> createState() => _ExpandableTileState();
@@ -84,34 +85,50 @@ class _ExpandableTileState extends State<ExpandableTile>
     final radius = BorderRadius.circular(10);
     final shape = RoundedRectangleBorder(borderRadius: radius);
 
-    final tile = InkWell(
-      borderRadius: radius,
-      onTap: _handleTap,
-      child: Material(
-        shape: shape,
-        color: widget.tileColor,
+    final fadeAnimation =
+        widget.animation.drive(CurveTween(curve: const Interval(0.0, 0.25)));
+
+    Widget content = ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: lerpDouble(
+          kSidebarWidth,
+          kSidebarWidthExtended,
+          widget.animation.value,
+        )!,
+      ),
+      child: ClipRect(
+        child: Row(
+          children: [
+            widget.icon,
+            const SizedBox(width: 10),
+            Align(
+              heightFactor: 1.0,
+              widthFactor: widget.animation.value,
+              alignment: AlignmentDirectional.centerStart,
+              child: FadeTransition(
+                alwaysIncludeSemantics: true,
+                opacity: fadeAnimation,
+                child: widget.label,
+              ),
+            ),
+            if (fadeAnimation.value == 1) ...[
+              const Spacer(),
+              _buildIcon(context),
+            ],
+          ],
+        ),
+      ),
+    );
+
+    final tile = Material(
+      shape: shape,
+      color: widget.background,
+      child: InkWell(
+        borderRadius: radius,
+        onTap: _handleTap,
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Row(
-            children: [
-              widget.icon,
-              const SizedBox(width: 10),
-              Align(
-                heightFactor: 1.0,
-                widthFactor: widget.animation.value,
-                alignment: AlignmentDirectional.centerStart,
-                child: FadeTransition(
-                  alwaysIncludeSemantics: true,
-                  opacity: widget.animation,
-                  child: widget.label,
-                ),
-              ),
-              // if (widget.animation.value == 1) ...[
-              //   const Spacer(),
-              //   _buildIcon(context),
-              // ],
-            ],
-          ),
+          child: content,
         ),
       ),
     );
@@ -121,7 +138,7 @@ class _ExpandableTileState extends State<ExpandableTile>
         tile,
         ClipRect(
           child: Align(
-            alignment: Alignment.center,
+            alignment: Alignment.centerRight,
             heightFactor: _heightFactor.value,
             child: child,
           ),
