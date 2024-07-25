@@ -1,0 +1,5 @@
+package com.example.sidebar_example
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity()

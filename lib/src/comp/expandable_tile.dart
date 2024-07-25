@@ -12,12 +12,13 @@ class ExpandableTile extends StatefulWidget {
     required this.children,
     required this.animation,
   });
+
+  final Animation<double> animation;
+  final Color? background;
+  final List<Widget> children;
   final Widget icon;
   final Widget label;
-  final Color? background;
   final Color? tileColor;
-  final List<Widget> children;
-  final Animation<double> animation;
 
   @override
   State<ExpandableTile> createState() => _ExpandableTileState();
@@ -27,16 +28,22 @@ class _ExpandableTileState extends State<ExpandableTile>
     with SingleTickerProviderStateMixin {
   static final Animatable<double> _easeInTween =
       CurveTween(curve: Curves.easeIn);
+
   static final Animatable<double> _halfTween =
       Tween<double>(begin: 0.0, end: 0.5);
 
   final CurveTween _heightFactorTween = CurveTween(curve: Curves.easeIn);
 
   late AnimationController _animationController;
-  late Animation<double> _iconTurns;
   late Animation<double> _heightFactor;
-
+  late Animation<double> _iconTurns;
   bool _isExpanded = false;
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -45,12 +52,6 @@ class _ExpandableTileState extends State<ExpandableTile>
     _heightFactor = _animationController.drive(_heightFactorTween);
     _iconTurns = _animationController.drive(_halfTween.chain(_easeInTween));
     if (_isExpanded) _animationController.value = 1.0;
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
   }
 
   void _toggleExpansion() {
